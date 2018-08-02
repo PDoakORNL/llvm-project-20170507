@@ -426,20 +426,26 @@ static unsigned AlignTokens(const FormatStyle &Style, F &&Matches,
 void WhitespaceManager::alignConsecutiveAssignments() {
   if (!Style.AlignConsecutiveAssignments)
     return;
+  std::vector<tok::TokenKind> assignment_tokens =
+    {tok::equal, tok::pipeequal, tok::caretequal, tok::percentequal,
+     tok::ampequal, tok::plusequal, tok::minusequal, tok::starequal,
+     tok::slashequal, tok::lesslessequal, tok::greatergreaterequal};
+  for (auto assignment_token : assignment_tokens)
+  {
+    AlignTokens(Style,
+		[&](const Change &C) {
+		  // Do not align on equal signs that are first on a line.
+		  if (C.NewlinesBefore > 0)
+		    return false;
 
-  AlignTokens(Style,
-              [&](const Change &C) {
-                // Do not align on equal signs that are first on a line.
-                if (C.NewlinesBefore > 0)
-                  return false;
+		  // Do not align on equal signs that are last on a line.
+		  if (&C != &Changes.back() && (&C + 1)->NewlinesBefore > 0)
+		    return false;
 
-                // Do not align on equal signs that are last on a line.
-                if (&C != &Changes.back() && (&C + 1)->NewlinesBefore > 0)
-                  return false;
-
-                return C.Tok->is(tok::equal);
-              },
-              Changes, /*StartAt=*/0);
+		  return C.Tok->is(assignment_token);
+		},
+		Changes, /*StartAt=*/0);
+  }
 }
 
 void WhitespaceManager::alignConsecutiveDeclarations() {

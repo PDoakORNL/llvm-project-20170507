@@ -80,12 +80,17 @@ struct FormatStyle {
 
   /// If ``true``, aligns consecutive assignments.
   ///
-  /// This will align the assignment operators of consecutive lines. This
-  /// will result in formattings like
+  /// This will align the declaration names of consecutive lines and
+  /// matching assignment operators. This includes consecutive |=, +=
+  /// -=, /=, *=. This will result in formattings like
   /// \code
   ///   int aaaa = 12;
   ///   int b    = 23;
   ///   int ccc  = 23;
+  ///
+  ///   int ddd += 12;
+  ///   int ee  += 22;
+  ///   int f   += 23;
   /// \endcode
   bool AlignConsecutiveAssignments;
 
