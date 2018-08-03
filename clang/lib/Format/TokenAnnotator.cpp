@@ -1010,6 +1010,7 @@ private:
       break;
     case tok::pp_pragma:
       parsePragma();
+      Type = LT_PreprocessorPragma;
       break;
     case tok::pp_if:
     case tok::pp_elif:

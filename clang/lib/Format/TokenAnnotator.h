@@ -32,6 +32,7 @@ enum LineType {
   LT_ObjCProperty, // An @property line.
   LT_Other,
   LT_PreprocessorDirective,
+  LT_PreprocessorPragma,
   LT_VirtualFunctionDecl
 };
 
